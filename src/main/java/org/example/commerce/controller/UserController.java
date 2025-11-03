@@ -5,10 +5,7 @@ import org.example.commerce.dto.UserRequestDto;
 import org.example.commerce.dto.UserResponseDto;
 import org.example.commerce.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -27,5 +24,12 @@ public class UserController {
         return ResponseEntity
                 .created(URI.create("/user" + "/" + userResponseDto.getId()))
                 .body(userResponseDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDto> findUserById(@PathVariable("id") Long userId){
+        UserResponseDto userResponseDto = userService.findUserById(userId);
+        return ResponseEntity.ok(userResponseDto);
+
     }
 }

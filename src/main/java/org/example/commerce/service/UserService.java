@@ -7,7 +7,9 @@ import org.example.commerce.dto.UserRequestDto;
 import org.example.commerce.dto.UserResponseDto;
 import org.example.commerce.entity.User;
 import org.example.commerce.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponseDto createUser (UserRequestDto userRequestDto){
+    public UserResponseDto createUser(UserRequestDto userRequestDto){
         User user = User.builder()
                 .username(userRequestDto.getUsername())
                 .password(userRequestDto.getPassword())
@@ -27,6 +29,14 @@ public class UserService {
         log.info(createdUser.toString());
 
         return UserMapper.toResponseDto(createdUser);
+
+    }
+
+    public UserResponseDto findUserById(Long id){
+        return userRepository
+                .findById(id)
+                .map(UserMapper::toResponseDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found By ID" + id));
 
     }
 }
