@@ -6,6 +6,7 @@ import org.example.commerce.dto.UserMapper;
 import org.example.commerce.dto.UserRequestDto;
 import org.example.commerce.dto.UserResponseDto;
 import org.example.commerce.entity.User;
+import org.example.commerce.exception.NotFoundException;
 import org.example.commerce.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class UserService {
         return userRepository
                 .findById(id)
                 .map(UserMapper::toResponseDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found By ID" + id));
+                .orElseThrow(() -> new NotFoundException("User Not Found By ID" + id));
 
     }
 }
