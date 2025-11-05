@@ -5,6 +5,12 @@ import org.example.commerce.entity.User;
 public class UserMapper {
 
     public static UserResponseDto toResponseDto(User user){
-        return UserResponseDto.builder().id(user.getId()).username(user.getUsername()).build();
+        return UserResponseDto
+                .builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
     }
 }

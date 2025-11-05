@@ -1,13 +1,11 @@
 package org.example.commerce.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.commerce.constant.Role;
 
 @Entity
 @Builder
@@ -21,5 +19,11 @@ public class User {
     private Long id;
     private String username;
     private String password;
+
+    @Column(unique = true)
+    private String email;
+
+    @Enumerated(EnumType.STRING)
+    private Role role; // admin or user
 
 }
