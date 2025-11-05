@@ -8,9 +8,7 @@ import org.example.commerce.dto.UserResponseDto;
 import org.example.commerce.entity.User;
 import org.example.commerce.exception.NotFoundException;
 import org.example.commerce.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +37,23 @@ public class UserService {
                 .map(UserMapper::toResponseDto)
                 .orElseThrow(() -> new NotFoundException("User Not Found By ID" + id));
 
+    }
+
+    public UserResponseDto updateUserById(Long id , UserRequestDto userRequestDto){
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User Not Found By Id: " + id));
+
+        if(userRequestDto.getUsername() != null){
+            user.setUsername(userRequestDto.getUsername());
+        }
+        if(userRequestDto.getPassword() != null){
+            user.setPassword(userRequestDto.getPassword());
+        }
+
+        User created = userRepository.save(user);
+        return UserMapper.toResponseDto(created);
+    }
+
+    public void deleteById(Long userId){
+        userRepository.deleteById(userId);
     }
 }
