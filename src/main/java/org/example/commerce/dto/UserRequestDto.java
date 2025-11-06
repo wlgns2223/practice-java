@@ -3,12 +3,11 @@ package org.example.commerce.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
+@Builder
 public class UserRequestDto {
     @NotBlank(message = "유저네임을 반드시 입력해주세요.")
     private String username;

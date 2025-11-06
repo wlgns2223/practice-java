@@ -6,11 +6,14 @@ import org.example.commerce.constant.Role;
 import org.example.commerce.dto.UserMapper;
 import org.example.commerce.dto.UserRequestDto;
 import org.example.commerce.dto.UserResponseDto;
+import org.example.commerce.dto.UserUpdateDto;
 import org.example.commerce.entity.User;
 import org.example.commerce.exception.DuplicateException;
 import org.example.commerce.exception.NotFoundException;
 import org.example.commerce.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,18 +22,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private boolean findUserByEmail(final String email){
+    public Optional<User> findUserByEmail(final String email){
         return userRepository.findUserByEmail(email);
     }
 
-    public void checkIfEmailExists(final String email){
-        boolean emailExists = findUserByEmail(email);
-        if(emailExists){
-            throw new DuplicateException("이메일 " + email + "이 이미 존재합니다");
-        }
-    }
-
-    public UserResponseDto createUser(UserRequestDto userRequestDto){
+    public User createUser(UserRequestDto userRequestDto){
         User user = User.builder()
                 .username(userRequestDto.getUsername())
                 .password(userRequestDto.getPassword())
@@ -42,33 +38,34 @@ public class UserService {
         User createdUser = userRepository.save(user);
         log.info(createdUser.toString());
 
-        return UserMapper.toResponseDto(createdUser);
+        return createdUser;
 
     }
 
-    public UserResponseDto findUserById(Long id){
+    public User findUserById(Long id){
         return userRepository
                 .findById(id)
-                .map(UserMapper::toResponseDto)
                 .orElseThrow(() -> new NotFoundException("User Not Found By ID" + id));
 
     }
 
-    public UserResponseDto updateUserById(Long id , UserRequestDto userRequestDto){
+    public User updateUserById(Long id , UserUpdateDto userUpdateDto){
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User Not Found By Id: " + id));
 
-        if(userRequestDto.getUsername() != null){
-            user.setUsername(userRequestDto.getUsername());
+        if(userUpdateDto.getUsername() != null){
+            user.setUsername(userUpdateDto.getUsername());
         }
-        if(userRequestDto.getPassword() != null){
-            user.setPassword(userRequestDto.getPassword());
+        if(userUpdateDto.getPassword() != null){
+            user.setPassword(userUpdateDto.getPassword());
         }
-        if(userRequestDto.getEmail() != null){
-            user.setEmail(userRequestDto.getEmail());
+        if(userUpdateDto.getEmail() != null){
+            user.setEmail(userUpdateDto.getEmail());
+        }
+        if(userUpdateDto.getRole() != null){
+            user.setRole(userUpdateDto.getRole());
         }
 
-        User created = userRepository.save(user);
-        return UserMapper.toResponseDto(created);
+        return userRepository.save(user);
     }
 
     public void deleteById(Long userId){

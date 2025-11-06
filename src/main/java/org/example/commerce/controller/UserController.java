@@ -1,8 +1,10 @@
 package org.example.commerce.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.commerce.dto.UserMapper;
 import org.example.commerce.dto.UserRequestDto;
 import org.example.commerce.dto.UserResponseDto;
+import org.example.commerce.dto.UserUpdateDto;
 import org.example.commerce.repository.UserRepository;
 import org.example.commerce.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +23,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto body){
 
-        UserResponseDto userResponseDto = userService.createUser(body);
-
+        UserResponseDto userResponseDto = UserMapper.toResponseDto(userService.createUser(body));
         return ResponseEntity
                 .created(URI.create("/user" + "/" + userResponseDto.getId()))
                 .body(userResponseDto);
@@ -30,15 +31,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable("id") Long userId){
-        UserResponseDto userResponseDto = userService.findUserById(userId);
-        return ResponseEntity.ok(userResponseDto);
+        return ResponseEntity.ok(UserMapper.toResponseDto(userService.findUserById(userId)));
 
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDto> patch(@PathVariable("id") Long userId, @RequestBody UserRequestDto dto){
-        UserResponseDto userResponseDto = userService.updateUserById(userId, dto);
-        return ResponseEntity.ok(userResponseDto);
+    public ResponseEntity<UserResponseDto> patch(@PathVariable("id") Long userId, @RequestBody UserUpdateDto dto){
+        return ResponseEntity.ok(UserMapper.toResponseDto(userService.updateUserById(userId, dto)));
 
     }
 
