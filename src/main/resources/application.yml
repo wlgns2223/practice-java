@@ -13,3 +13,8 @@ spring:
         format_sql: true
         hbm2ddl:
           auto: create
+
+security:
+  jwt:
+    secret: ${SECRET}
+    ttl: ${TTL}
