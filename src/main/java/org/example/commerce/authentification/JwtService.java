@@ -2,10 +2,13 @@ package org.example.commerce.authentification;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.example.commerce.exception.InvalidTokenException;
+import org.example.commerce.exception.TokenExpireException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -56,8 +59,11 @@ public class JwtService {
 
         } catch (ExpiredJwtException e) {
             log.error(e.getMessage());
-            log.info("expired do something...");
-            throw new RuntimeException(e.getMessage());
+            throw new TokenExpireException(e.getMessage(),"Bearer error=\"expired_token\"");
+
+        } catch (JwtException e){
+            log.error(e.getMessage());
+            throw new InvalidTokenException(e.getMessage(), "Bearer error=\"invalid_token\"");
 
         } catch (Exception e){
             log.error(e.getMessage());
