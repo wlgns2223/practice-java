@@ -2,6 +2,7 @@ package org.example.commerce.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.commerce.annotation.LoggingAnnotation;
 import org.example.commerce.dto.SignInDto;
 import org.example.commerce.dto.TokenParseDto;
 import org.example.commerce.dto.UserMapper;
@@ -49,5 +50,11 @@ public class AuthController {
     @PostMapping("parse")
     public ResponseEntity<User> parse(@RequestBody TokenParseDto tokenParseDto){
         return ResponseEntity.ok(authService.parseToken(tokenParseDto));
+    }
+
+    @LoggingAnnotation
+    @GetMapping("/test")
+    public ResponseEntity<String> test(){
+        return ResponseEntity.ok("test");
     }
 }
