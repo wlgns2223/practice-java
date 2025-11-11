@@ -7,10 +7,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("CAR")
 public class Car extends Item{
     private String brand;
