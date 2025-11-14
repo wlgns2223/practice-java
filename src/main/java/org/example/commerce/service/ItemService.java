@@ -14,12 +14,13 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-
     public Item create(ItemCreateRequestDto<?> itemCreateRequestDto){
 
         Item item = itemCreateRequestDto.toEntity();
-
-
         return itemRepository.save(item);
+    }
+
+    public void delete(Long id){
+        itemRepository.deleteById(id);
     }
 }
