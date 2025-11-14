@@ -2,10 +2,11 @@ package org.example.commerce.dto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 import org.example.commerce.entity.Item;
 
-@Data
+@Getter
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -16,12 +17,12 @@ import org.example.commerce.entity.Item;
         @JsonSubTypes.Type(value = FruitCreateRequestDto.class, name = "FRUIT"),
         @JsonSubTypes.Type(value = ClotheCreateRequestDto.class, name = "CLOTHE")
 })
+@ToString
 public abstract class ItemCreateRequestDto<T extends Item> {
 
     private String name;
     private int price;
     private int quantity;
 
-    abstract T toEntity();
-
+    public abstract T toEntity();
 }
