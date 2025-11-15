@@ -13,12 +13,12 @@ import org.example.commerce.entity.Item;
         property = "dType"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CarCreateRequestDto.class, name = "CAR"),
-        @JsonSubTypes.Type(value = FruitCreateRequestDto.class, name = "FRUIT"),
-        @JsonSubTypes.Type(value = ClotheCreateRequestDto.class, name = "CLOTHE")
+        @JsonSubTypes.Type(value = CarRequestDto.class, name = "CAR"),
+        @JsonSubTypes.Type(value = FruitRequestDto.class, name = "FRUIT"),
+        @JsonSubTypes.Type(value = ClothesRequestDto.class, name = "CLOTHE")
 })
 @ToString
-public abstract class ItemCreateRequestDto<T extends Item> {
+public abstract class ItemRequestDto<T extends Item> {
 
     private String name;
     private int price;

@@ -25,7 +25,7 @@ public class UserController {
 
         UserResponseDto userResponseDto = UserMapper.toResponseDto(userService.createUser(body));
         return ResponseEntity
-                .created(URI.create("/user" + "/" + userResponseDto.getId()))
+                .created(URI.create("/user/" + userResponseDto.getId()))
                 .body(userResponseDto);
     }
 

@@ -4,7 +4,7 @@ import lombok.*;
 import org.example.commerce.constant.Role;
 
 @Builder
-@Data
+@Getter
 public class UserResponseDto {
 
     private Long id;

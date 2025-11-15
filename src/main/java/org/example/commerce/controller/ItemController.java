@@ -1,10 +1,13 @@
 package org.example.commerce.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.commerce.dto.ItemCreateRequestDto;
+import org.example.commerce.dto.ItemRequestDto;
+import org.example.commerce.entity.Item;
 import org.example.commerce.service.ItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/item")
@@ -14,8 +17,17 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody ItemCreateRequestDto<?> itemCreateRequestDto){
-        return ResponseEntity.ok(itemService.create(itemCreateRequestDto));
+    public ResponseEntity<Item> create(@RequestBody ItemRequestDto<?> itemRequestDto){
+        Item item = itemService.create(itemRequestDto);
+        return ResponseEntity
+                .created(URI.create("/item/" + item.getId()))
+                .body(item);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Item> getItem(@PathVariable Long id){
+        return ResponseEntity.ok(itemService.getItem(id));
 
     }
 
