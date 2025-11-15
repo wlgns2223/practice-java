@@ -14,12 +14,13 @@ public class CarCreateRequestDto extends ItemCreateRequestDto<Item> {
 
     @Override
     public Car toEntity() {
-        return Car.create(
-                this.getName(),
-                this.getPrice(),
-                this.getQuantity(),
-                this.brand,
-                this.type
-        );
+        return Car.builder()
+                .name(this.getName())
+                .price(this.getPrice())
+                .stockQuantity(this.getQuantity())
+                .brand(brand)
+                .type(type)
+                .build();
+
     }
 }
