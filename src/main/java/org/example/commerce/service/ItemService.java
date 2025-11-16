@@ -3,9 +3,12 @@ package org.example.commerce.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commerce.dto.ItemRequestDto;
+import org.example.commerce.dto.ItemUpdateDto;
 import org.example.commerce.entity.Item;
+import org.example.commerce.exception.NotFoundException;
 import org.example.commerce.repository.ItemRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -26,5 +29,15 @@ public class ItemService {
 
     public void delete(Long id){
         itemRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Item update(Long id, ItemUpdateDto itemUpdateDto){
+        log.info("dto {}",itemUpdateDto.toString());
+        Item item = itemRepository.findById(id).orElseThrow(() -> new NotFoundException("User Not Found By Id: " + id));
+
+        itemUpdateDto.update(item);
+
+        return item;
     }
 }

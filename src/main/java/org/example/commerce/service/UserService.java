@@ -12,6 +12,7 @@ import org.example.commerce.exception.DuplicateException;
 import org.example.commerce.exception.NotFoundException;
 import org.example.commerce.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -49,6 +50,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public User updateUserById(Long id , UserUpdateDto userUpdateDto){
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User Not Found By Id: " + id));
 

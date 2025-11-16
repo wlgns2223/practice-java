@@ -1,5 +1,6 @@
 package org.example.commerce.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.*;
@@ -9,7 +10,11 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("FRUIT")
 public class Fruit extends Item{
+
+    @Column(nullable = false)
     private String color;
+
+    @Column(nullable = false)
     private String season;
 
     @Builder

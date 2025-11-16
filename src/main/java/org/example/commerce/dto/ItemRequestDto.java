@@ -2,8 +2,9 @@ package org.example.commerce.dto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.validation.constraints.NotBlank;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import org.example.commerce.entity.Item;
 
 @Getter
@@ -17,11 +18,16 @@ import org.example.commerce.entity.Item;
         @JsonSubTypes.Type(value = FruitRequestDto.class, name = "FRUIT"),
         @JsonSubTypes.Type(value = ClothesRequestDto.class, name = "CLOTHES")
 })
-@ToString
+@EqualsAndHashCode
 public abstract class ItemRequestDto<T extends Item> {
 
+    @NotBlank
     private String name;
+
+    @NotBlank
     private int price;
+
+    @NotBlank
     private int quantity;
 
     public abstract T toEntity();

@@ -2,6 +2,7 @@ package org.example.commerce.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.commerce.dto.ItemRequestDto;
+import org.example.commerce.dto.ItemUpdateDto;
 import org.example.commerce.entity.Item;
 import org.example.commerce.service.ItemService;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,12 @@ public class ItemController {
     @GetMapping("/{id}")
     public ResponseEntity<Item> getItem(@PathVariable Long id){
         return ResponseEntity.ok(itemService.getItem(id));
+
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Item> update(@PathVariable Long id, @RequestBody ItemUpdateDto itemUpdateDto){
+        return ResponseEntity.ok(itemService.update(id, itemUpdateDto));
 
     }
 

@@ -1,5 +1,6 @@
 package org.example.commerce.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,7 +11,11 @@ import org.example.commerce.entity.Clothes;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ClothesRequestDto extends ItemRequestDto<Clothes> {
+
+    @NotBlank
     private String gender;
+
+    @NotBlank
     private String size;
 
     @Override
