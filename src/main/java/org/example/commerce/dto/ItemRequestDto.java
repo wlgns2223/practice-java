@@ -15,7 +15,7 @@ import org.example.commerce.entity.Item;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = CarRequestDto.class, name = "CAR"),
         @JsonSubTypes.Type(value = FruitRequestDto.class, name = "FRUIT"),
-        @JsonSubTypes.Type(value = ClothesRequestDto.class, name = "CLOTHE")
+        @JsonSubTypes.Type(value = ClothesRequestDto.class, name = "CLOTHES")
 })
 @ToString
 public abstract class ItemRequestDto<T extends Item> {

@@ -8,7 +8,7 @@ import org.example.commerce.entity.Item;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CarRequestDto extends ItemRequestDto<Item> {
+public class CarRequestDto extends ItemRequestDto<Car> {
     private String brand;
     private String type;
 

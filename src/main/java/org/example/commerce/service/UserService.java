@@ -53,16 +53,16 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User Not Found By Id: " + id));
 
         if(userUpdateDto.getUsername() != null){
-            user.setUsername(userUpdateDto.getUsername());
+            user.updateUsername(userUpdateDto.getUsername());
         }
         if(userUpdateDto.getPassword() != null){
-            user.setPassword(userUpdateDto.getPassword());
+            user.updatePassword(userUpdateDto.getPassword());
         }
         if(userUpdateDto.getEmail() != null){
-            user.setEmail(userUpdateDto.getEmail());
+            user.updateEmail(userUpdateDto.getEmail());
         }
         if(userUpdateDto.getRole() != null){
-            user.setRole(userUpdateDto.getRole());
+            user.updateRole(userUpdateDto.getRole());
         }
 
         return userRepository.save(user);
