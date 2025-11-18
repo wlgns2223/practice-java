@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.commerce.constant.Role;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
