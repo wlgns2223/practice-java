@@ -24,7 +24,7 @@ public class ItemService {
     }
 
     public Item getItem(Long id){
-        return itemRepository.findById(id).orElse(null);
+        return itemRepository.findById(id).orElseThrow(() -> new NotFoundException("Item Not Found By ID" + id));
     }
 
     public void delete(Long id){
@@ -34,7 +34,7 @@ public class ItemService {
     @Transactional
     public Item update(Long id, ItemUpdateDto itemUpdateDto){
         log.info("dto {}",itemUpdateDto.toString());
-        Item item = itemRepository.findById(id).orElseThrow(() -> new NotFoundException("User Not Found By Id: " + id));
+        Item item = itemRepository.findById(id).orElseThrow(() -> new NotFoundException("Item Not Found By Id: " + id));
 
         itemUpdateDto.update(item);
 
