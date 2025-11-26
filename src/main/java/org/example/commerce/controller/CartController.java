@@ -13,7 +13,7 @@ public class CartController {
 
     final CartService cartService;
 
-    @PostMapping("/users/{userId}/item")
+    @PutMapping("/users/{userId}/item")
     public ResponseEntity<Object> addToCart(@PathVariable Long userId, @RequestBody CartAddDto cartAddDto){
 
         cartService.addToCart(userId,cartAddDto);

@@ -10,6 +10,8 @@ import org.example.commerce.repository.CartRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -17,7 +19,7 @@ public class CartService {
     final private UserService userService;
     final private ItemService itemService;
 
-    //TODO 멱등성, 재고관리
+    //TODO 동시성
     @Transactional
     public void addToCart(Long userId, CartAddDto cartAddDto){
 
@@ -26,9 +28,26 @@ public class CartService {
             cart = createNewCart(userId);
         }
 
+        Optional<CartItem> cartItem = findItemInCart(cart, cartAddDto);
+
+        if(cartItem.isPresent()){
+            cartItem.get().updateCount(cartAddDto.getCount());
+        } else {
+            CartItem newItem = makeNewCartItem(cartAddDto);
+            cart.addItem(newItem);
+        }
+    }
+
+    private CartItem makeNewCartItem(CartAddDto cartAddDto){
         Item item = itemService.getItem(cartAddDto.getItemId());
-        CartItem cartItem = CartItem.builder().cart(cart).item(item).count(cartAddDto.getCount()).build();
-        cart.addItem(cartItem);
+        return CartItem.builder().item(item).count(cartAddDto.getCount()).build();
+    }
+
+    private Optional<CartItem> findItemInCart(Cart cart, CartAddDto cartAddDto){
+        return cart.getItems()
+                .stream()
+                .filter(item -> item.getId().equals(cartAddDto.getItemId()))
+                .findFirst();
     }
 
     private Cart createNewCart(Long userId ){

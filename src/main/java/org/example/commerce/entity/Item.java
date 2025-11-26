@@ -36,10 +36,14 @@ public abstract class Item extends BaseEntity {
         this.name = name;
     }
 
-    public void addStock(int newStock){
-        int nextStock = stockQuantity + newStock;
-        if(nextStock < 0){
-            throw new BadRequestException("총 재고는 음수가 될 수 없습니다.");
+    public void addQuantity(int quantity){
+        stockQuantity = stockQuantity + quantity;
+    }
+
+    public void subtractQuantity(int quantity){
+        int nextStock = stockQuantity - quantity;
+        if(nextStock <0 ){
+            throw new BadRequestException("재고는 음수가 될 수 없습니다.");
         }
         stockQuantity = nextStock;
     }

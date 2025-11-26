@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.commerce.exception.BadRequestException;
 
 @Entity
 @Getter
@@ -30,4 +31,18 @@ public class CartItem extends BaseEntity {
         this.item = item;
         this.count = count;
     }
+
+    public void updateCount(int count){
+        if(count < 0){
+            throw new BadRequestException("수량은 음수가 될 수 없습니다.");
+        }
+        item.subtractQuantity(count);
+        this.count = count;
+    }
+
+    public void changeCart(Cart cart) {
+        this.cart = cart;
+    }
+
+
 }

@@ -35,7 +35,7 @@ public abstract class ItemUpdateDto {
         }
 
         if(stockQuantity != null){
-            item.addStock(stockQuantity);
+            item.addQuantity(stockQuantity);
         }
     }
 

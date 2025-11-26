@@ -27,6 +27,7 @@ public class Cart extends BaseEntity {
     }
 
     public void addItem(CartItem item){
+        item.changeCart(this);
         items.add(item);
     }
 
