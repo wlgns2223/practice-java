@@ -21,12 +21,9 @@ public class CartService {
 
     //TODO 동시성
     @Transactional
-    public void addToCart(Long userId, CartAddDto cartAddDto){
+    public Cart addToCart(Long userId, CartAddDto cartAddDto){
 
-        Cart cart = cartRepository.findById(userId).orElse(null);
-        if(cart == null){
-            cart = createNewCart(userId);
-        }
+        Cart cart = cartRepository.findById(userId).orElseGet(() -> createNewCart(userId));
 
         Optional<CartItem> cartItem = findItemInCart(cart, cartAddDto);
 
@@ -36,6 +33,8 @@ public class CartService {
             CartItem newItem = makeNewCartItem(cartAddDto);
             cart.addItem(newItem);
         }
+
+        return cart;
     }
 
     private CartItem makeNewCartItem(CartAddDto cartAddDto){
@@ -52,6 +51,6 @@ public class CartService {
 
     private Cart createNewCart(Long userId ){
         User user = userService.findUserById(userId);
-        return cartRepository.save(Cart.builder().user(user).build());
+        return Cart.builder().user(user).build();
     }
 }

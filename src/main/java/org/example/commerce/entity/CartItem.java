@@ -4,15 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.commerce.exception.BadRequestException;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(callSuper = true,exclude = "cart")
 public class CartItem extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
@@ -25,19 +25,15 @@ public class CartItem extends BaseEntity {
 
     private int count;
 
-    @Builder
-    public CartItem(Cart cart, Item item,int count){
-        this.cart = cart;
-        this.item = item;
-        this.count = count;
-    }
-
-    public void updateCount(int count){
-        if(count < 0){
+    public void updateCount(int newCount){
+        if(newCount < 0){
             throw new BadRequestException("수량은 음수가 될 수 없습니다.");
         }
-        item.subtractQuantity(count);
-        this.count = count;
+        int delta = newCount - count;
+        if(delta > 0) item.subtractQuantity(delta);
+        else item.addQuantity(-delta);
+
+        this.count = newCount;
     }
 
     public void changeCart(Cart cart) {
