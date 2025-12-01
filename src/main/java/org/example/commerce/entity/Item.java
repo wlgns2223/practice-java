@@ -36,23 +36,43 @@ public abstract class Item extends BaseEntity {
         this.name = name;
     }
 
-    public void addQuantity(int quantity){
+    public void changePrice(int newPrice){
+        validatePrice(newPrice);
+        this.price = newPrice;
+    }
+
+    private void validatePrice(int newPrice){
+        if(newPrice < 0){
+            throw new IllegalArgumentException("가격음 음수가 될 수 없습니다.");
+        }
+    }
+
+    public void changeStockQty(int newStockQuantity){
+        validateQuantity(newStockQuantity);
+        this.stockQuantity = newStockQuantity;
+
+    }
+
+
+
+    public void increaseStock(int quantity){
+        validateQuantity(quantity);
         stockQuantity = stockQuantity + quantity;
     }
 
-    public void subtractQuantity(int quantity){
-        int nextStock = stockQuantity - quantity;
-        if(nextStock <0 ){
+    public void decreaseStock(int quantity){
+        validateQuantity(quantity);
+        if(stockQuantity < quantity ){
             throw new BadRequestException("재고는 음수가 될 수 없습니다.");
         }
-        stockQuantity = nextStock;
+        stockQuantity -= quantity;
     }
 
-    public void updatePrice(int newPrice){
-        if(newPrice < 0){
-            throw new BadRequestException("가격은 음수가 될 수 없습니다.");
+    private void validateQuantity(int quantity){
+        if(quantity < 0){
+            throw new BadRequestException("수량은 음수가 될 수 없습니다.");
         }
-        price = newPrice;
+
     }
 
 }

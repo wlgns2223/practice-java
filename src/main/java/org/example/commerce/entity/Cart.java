@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -19,14 +20,28 @@ public class Cart extends BaseEntity {
     @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
     final private List<CartItem> items = new ArrayList<>();
 
-    @Builder
-    public Cart(User user){
-        this.user = user;
+
+    public static Cart of(User user){
+        Cart cart = new Cart();
+        cart.user = user;
+        return cart;
     }
 
-    public void addItem(CartItem item){
-        item.changeCart(this);
-        items.add(item);
+    public void addItem(CartItem cartItem){
+        cartItem.assignToCart(this);
+        items.add(cartItem);
+    }
+
+    public Optional<CartItem> findItemById(Long itemId){
+        return items.stream().filter(item -> item.getId().equals(itemId)).findFirst();
+    }
+
+    public void addOrUpdateItem(Item item, int count){
+        findItemById(item.getId())
+                .ifPresentOrElse(
+                        existing -> existing.changeCount(count),
+                        () -> addItem(CartItem.of(item,count))
+                );
     }
 
 }

@@ -31,11 +31,11 @@ public abstract class ItemUpdateDto {
         }
 
         if(price != null){
-            item.updatePrice(price);
+            item.changePrice(price);
         }
 
         if(stockQuantity != null){
-            item.addQuantity(stockQuantity);
+            item.changeStockQty(stockQuantity);
         }
     }
 

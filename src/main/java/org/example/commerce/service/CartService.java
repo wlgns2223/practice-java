@@ -3,14 +3,11 @@ package org.example.commerce.service;
 import lombok.RequiredArgsConstructor;
 import org.example.commerce.dto.CartAddDto;
 import org.example.commerce.entity.Cart;
-import org.example.commerce.entity.CartItem;
 import org.example.commerce.entity.Item;
 import org.example.commerce.entity.User;
 import org.example.commerce.repository.CartRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,34 +20,15 @@ public class CartService {
     @Transactional
     public Cart addToCart(Long userId, CartAddDto cartAddDto){
 
-        Cart cart = cartRepository.findById(userId).orElseGet(() -> createNewCart(userId));
+        Cart cart = cartRepository.findById(userId).orElseGet(() -> {
+            User user = userService.findUserById(userId);
+            return Cart.of(user);
+        });
 
-        Optional<CartItem> cartItem = findItemInCart(cart, cartAddDto);
-
-        if(cartItem.isPresent()){
-            cartItem.get().updateCount(cartAddDto.getCount());
-        } else {
-            CartItem newItem = makeNewCartItem(cartAddDto);
-            cart.addItem(newItem);
-        }
-
-        return cart;
-    }
-
-    private CartItem makeNewCartItem(CartAddDto cartAddDto){
         Item item = itemService.getItem(cartAddDto.getItemId());
-        return CartItem.builder().item(item).count(cartAddDto.getCount()).build();
+        cart.addOrUpdateItem(item,cartAddDto.getCount());
+
+        return cartRepository.save(cart);
     }
 
-    private Optional<CartItem> findItemInCart(Cart cart, CartAddDto cartAddDto){
-        return cart.getItems()
-                .stream()
-                .filter(item -> item.getId().equals(cartAddDto.getItemId()))
-                .findFirst();
-    }
-
-    private Cart createNewCart(Long userId ){
-        User user = userService.findUserById(userId);
-        return Cart.builder().user(user).build();
-    }
 }

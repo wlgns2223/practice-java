@@ -9,7 +9,6 @@ import org.example.commerce.exception.BadRequestException;
 
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = true,exclude = "cart")
@@ -25,20 +24,34 @@ public class CartItem extends BaseEntity {
 
     private int count;
 
-    public void updateCount(int newCount){
-        if(newCount < 0){
-            throw new BadRequestException("수량은 음수가 될 수 없습니다.");
-        }
-        int delta = newCount - count;
-        if(delta > 0) item.subtractQuantity(delta);
-        else item.addQuantity(-delta);
+    public static CartItem of(Item item, int count){
+        validateCount(count);
+        CartItem cartItem = new CartItem();
+        item.decreaseStock(count);
+        cartItem.item = item;
+        cartItem.count = count;
 
-        this.count = newCount;
+        return cartItem;
     }
 
-    public void changeCart(Cart cart) {
+    private static void validateCount(int count){
+        if(count <= 0){
+            throw new IllegalArgumentException("수량은 1개 이상이어야 합니다.");
+        }
+    }
+
+    public void assignToCart(Cart cart){
         this.cart = cart;
     }
 
+    public void changeCount(int newCount){
+        int delta = this.count - newCount;
 
+        if(delta > 0){
+            item.decreaseStock(delta);
+        } else {
+            item.increaseStock(delta);
+        }
+        this.count = newCount;
+    }
 }

@@ -24,9 +24,6 @@ public class CartServiceUnitTests {
     private CartRepository cartRepository;
 
     @Mock
-    private UserService userService;
-
-    @Mock
     private  ItemService itemService;
 
     @InjectMocks
@@ -45,7 +42,7 @@ public class CartServiceUnitTests {
                 .role(Role.USER)
                 .build();
 
-        Cart cartStub = Cart.builder().user(userStub).build();
+        Cart cartStub = Cart.of(userStub);
         Item itemStub = Car.builder()
                 .name("item")
                 .price(1000)
@@ -54,11 +51,7 @@ public class CartServiceUnitTests {
                 .type("SUV")
                 .build();
 
-        CartItem cartItemStub = CartItem.builder()
-                .item(itemStub)
-                .cart(cartStub)
-                .count(cartAddDto.getCount())
-                .build();
+        CartItem cartItemStub = CartItem.of(itemStub, cartAddDto.getCount());
 
         when(itemService.getItem(1L)).thenReturn(itemStub);
         when(cartRepository.findById(userId)).thenReturn(Optional.of(cartStub));
@@ -67,6 +60,36 @@ public class CartServiceUnitTests {
         Cart actual = sut.addToCart(userId, cartAddDto);
 
         assertThat(actual.getItems()).contains(cartItemStub);
+    }
+
+    @Test
+    @DisplayName("재고보다 많은 상품을 주문할 수 없다.")
+    public void cannot_order_more_than_stock(){
+        Long userId = 1L;
+        CartAddDto cartAddDto = CartAddDto.builder().itemId(1L).count(10).build();
+        User userStub = User.builder()
+                .username("foo")
+                .password("password")
+                .email("email@gmail.com")
+                .role(Role.USER)
+                .build();
+
+        Cart cartStub = Cart.of(userStub);
+        Item itemStub = Car.builder()
+                .name("item")
+                .price(1000)
+                .stockQuantity(1)
+                .brand("brand")
+                .type("SUV")
+                .build();
+
+
+        when(itemService.getItem(1L)).thenReturn(itemStub);
+        when(cartRepository.findById(userId)).thenReturn(Optional.of(cartStub));
+
+        assertThatThrownBy(() -> sut.addToCart(userId, cartAddDto))
+                .isInstanceOf(RuntimeException.class);
+
     }
 
 }

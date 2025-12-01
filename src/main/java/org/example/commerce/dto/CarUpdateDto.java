@@ -22,8 +22,7 @@ public class CarUpdateDto extends ItemUpdateDto{
         if(!(item instanceof Car car)){
             throw new IllegalArgumentException("잘 못된 엔터티입니다.");
         }
-        if(brand != null) car.updateBrand(brand);
-        if(type != null) car.updateType(type);
-
+        car.updateBrand(brand);
+        car.updateType(type);
     }
 }
