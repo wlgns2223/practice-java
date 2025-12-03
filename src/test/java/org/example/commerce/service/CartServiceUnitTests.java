@@ -10,8 +10,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.zip.CheckedOutputStream;
 
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.*;
@@ -20,8 +27,11 @@ import static org.assertj.core.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class CartServiceUnitTests {
 
+    private static final Logger log = LoggerFactory.getLogger(CartServiceUnitTests.class);
     @Mock
     private CartRepository cartRepository;
+
+
 
     @Mock
     private  ItemService itemService;

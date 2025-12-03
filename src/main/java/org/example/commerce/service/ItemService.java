@@ -40,4 +40,11 @@ public class ItemService {
 
         return item;
     }
+
+    @Transactional
+    public void decreaseStock(Long itemId, int quantity){
+        Item item = itemRepository.findByIdWithLock(itemId).orElseThrow();
+        item.decreaseStock(quantity);
+
+    }
 }
